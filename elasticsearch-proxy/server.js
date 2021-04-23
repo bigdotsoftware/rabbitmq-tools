@@ -1,4 +1,9 @@
 //--------------------------------------------
+// Author
+// Piotr Zuk <piotr.zuk@bigdotsoftware.pl>
+// www.bigdotsoftware.pl
+//
+//--------------------------------------------
 // Disclaimer
 //
 // THIS PROJECT IS NOT PRODUCTION READY, USE 
@@ -43,11 +48,12 @@ var rabbitConnection = {
 async function rabbitConnect() {
 
     if (!rabbitConnection.connection) {
-        console.log('> Initialize RabbitMQ connection');
+        console.log(`> Initialize RabbitMQ connection ${config.rabbitMQ.host}`);
         rabbitConnection.connection = await amqp.connect(config.rabbitMQ.host);
         rabbitConnection.connection.on('error', (err) => {
             console.log('ERROR - connection error: ' + err);
             rabbitConnection.connection = null;
+            rabbitConnection.channel = null;
         });
         console.log('> Initialize RabbitMQ connection - CONNECTED');
         rabbitConnection.channel == null;
@@ -66,6 +72,11 @@ async function rabbitConnect() {
         return;
 
     rabbitEmitter.on('event', (queue, index, type, id, body, res) => {
+
+        if (!rabbitConnection.connection || !rabbitConnection.channel) {
+            console.log('ERROR - cannot send message, connection or channel not open');
+            return;
+        }
 
         rabbitConnection.eventEmitterRegistered = true;
         rabbitConnection.channel.assertQueue(queue, {
@@ -171,15 +182,14 @@ async function processRequest(index, type, id, body, res) {
     const queue = config.extractQueueFn(body);
     if (queue != null) {
         await rabbitConnect()
-            .then(() => {
-                rabbitEmitter.emit('event', queue, index, type, id, body, res);
-            })
             .catch((err) => {
                 rabbitConnection.connection = null;
                 rabbitConnection.channel = null;
                 console.log('> Initialize RabbitMQ connection - ERROR ' + err);
                 reply400(JSON.stringify(err), res);
-            })
+            });
+
+        rabbitEmitter.emit('event', queue, index, type, id, body, res);
         
     } else {
         console.log('> ERROR - cannot extract queue name from the request body');

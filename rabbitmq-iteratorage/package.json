@@ -3,6 +3,8 @@
   "main": "server.js",
   "dependencies": {
     "amqplib": "^0.7.1",
-    "bitsyntax": "^0.1.0"
+    "bitsyntax": "^0.1.0",
+    "elasticsearch": "^16.7.2",
+    "uuid": "^8.3.2"
   }
 }
