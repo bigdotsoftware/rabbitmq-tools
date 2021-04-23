@@ -1,0 +1,8 @@
+{
+  "name": "rabbitmq-iteratorage",
+  "main": "server.js",
+  "dependencies": {
+    "amqplib": "^0.7.1",
+    "bitsyntax": "^0.1.0"
+  }
+}
