@@ -35,3 +35,8 @@ Run project
     npm start
 
 Configuration is inside server.js file
+
+Sample Result
+
+![rabbitmq-iteratorage-elasticsearch-hits](https://github.com/bigdotsoftware/rabbitmq-tools/raw/master/rabbitmq-iteratorage-elasticsearch-hits.png)
+
