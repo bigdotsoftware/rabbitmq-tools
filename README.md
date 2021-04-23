@@ -14,12 +14,12 @@ Sample requests:
 
     curl -XPOST 'http://127.0.0.1:9200/sampleindex/_doc/' -H 'Content-Type: application/json' -d '{
        "hello" : "world",
-       "queueName" : "q.testqueue2222a"
+       "queueName" : "q.testqueue"
     }'
 
     curl -XPOST 'http://127.0.0.1:9200/sampleindex/_doc/my_id' -H 'Content-Type: application/json' -d '{
        "hello" : "world",
-       "queueName" : "q.testqueue2222a"
+       "queueName" : "q.testqueue"
     }'
 
 Body of both requests will be passed to RabbitMQ into the queue specified by the "queueName" atttribute (see configuration inside server.js file)
