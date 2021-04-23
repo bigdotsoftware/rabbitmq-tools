@@ -44,7 +44,7 @@ async function rabbitConnect() {
 
     if (!rabbitConnection.connection) {
         console.log('> Initialize RabbitMQ connection');
-        rabbitConnection.connection = await amqp.connect(config.host);
+        rabbitConnection.connection = await amqp.connect(config.rabbitMQ.host);
         rabbitConnection.connection.on('error', (err) => {
             console.log('ERROR - connection error: ' + err);
             rabbitConnection.connection = null;
@@ -72,7 +72,15 @@ async function rabbitConnect() {
             durable: true
         });
 
-        let result = rabbitConnection.channel.sendToQueue(queue, Buffer.from(JSON.stringify({ _index: index, _type: type, _id: id, payload: body })));
+        let result = rabbitConnection.channel.sendToQueue(
+            queue, 
+            Buffer.from(JSON.stringify(body)), 
+            { headers: {
+               _index: index,
+               _type: type,
+               _id: id
+            }}
+        );
         if (result) {
             console.log("> Sent to the queue %s", queue);
             res.status(200).send({
