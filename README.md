@@ -22,7 +22,7 @@ Sample requests:
        "queueName" : "q.testqueue"
     }'
 
-Body of both requests will be passed to RabbitMQ into the queue specified by the "queueName" atttribute (see configuration inside server.js file)
+Body of both requests will be passed into RabbitMQ queue. Queue is specified by the "queueName" atttribute (see configuration inside server.js file)
 
 # rabbitmq-iteratorage
 
